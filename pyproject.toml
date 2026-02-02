@@ -5,6 +5,9 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["fasthttp"]
 
+[tool.hatch.build.targets.wheel.sdist]
+exclude = ["/tests", "/docs", "/examples"]
+
 [project]
 name = "fasthttp-client"
 version = "0.1.0"
