@@ -1,0 +1,11 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+include SECURITY.md
+include MANIFEST.in
+recursive-include fasthttp *.py
+recursive-include examples *.py
+recursive-include docs *.md
+global-exclude *.py[cod] __pycache__ *.so
+global-exclude *.egg-info *.egg

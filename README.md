@@ -24,7 +24,7 @@
 
 ### Installation
 ```bash
-pip install fasthttp
+pip install fasthttp-client
 ```
 
 ### Basic Usage
@@ -34,9 +34,11 @@ from fasthttp.response import Response
 
 app = FastHTTP()
 
+
 @app.get(url="https://httpbin.org/get")
 async def get_data(resp: Response):
     return resp.json()
+
 
 if __name__ == "__main__":
     app.run()
@@ -136,4 +138,4 @@ See [SECURITY.md](SECURITY.md) for security policies.
 
 ---
 
-**Made with ❤️ by the FastHTTP Team**
+**Made with ❤️ by the NDUgram Team**
