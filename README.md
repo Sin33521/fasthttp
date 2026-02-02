@@ -2,9 +2,11 @@
 
 <div align="center">
 
-![PyPI version](https://badge.fury.io/py/fasthttp.svg)
-![Python Version](https://img.shields.io/pypi/pyversions/fasthttp.svg)
-![License](https://img.shields.io/pypi/l/fasthttp.svg)
+![aiohttp](https://img.shields.io/badge/aiohttp-3.13.3-blue.svg)
+![ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)
+![mypy](https://img.shields.io/badge/type%20checked-mypy-2E5090.svg)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 **🚀 Simple & Fast HTTP Client for Python**
 
