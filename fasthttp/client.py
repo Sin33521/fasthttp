@@ -3,6 +3,13 @@ import time
 
 import aiohttp
 
+from fasthttp.exceptions import (
+    FastHTTPBadStatusError,
+    FastHTTPConnectionError,
+    FastHTTPRequestError,
+    FastHTTPTimeoutError,
+    log_success,
+)
 from fasthttp.response import Response
 from fasthttp.routing import Route
 
@@ -30,7 +37,8 @@ class HTTPClient:
         - Applies request configuration based on HTTP method
         - Sends the request using an existing aiohttp ClientSession
         - Measures request execution time
-        - Logs outgoing requests and incoming responses
+        - Logs request lifecycle events
+        - Automatically handles and logs errors
         - Executes the route handler with the Response object
 
         Returns:
@@ -60,15 +68,22 @@ class HTTPClient:
                 timeout=config.get("timeout"),
             ) as resp:
                 elapsed = (time.perf_counter() - start) * 1000
+
+                if resp.status >= 400:
+                    text = await resp.text()
+                    error = FastHTTPBadStatusError(
+                        message=f"HTTP {resp.status}",
+                        url=route.url,
+                        method=route.method,
+                        status_code=resp.status,
+                        response_body=text,
+                    )
+                    error.log()
+                    return None
+
                 text = await resp.text()
 
-                self.logger.info(
-                    "← %s %s [%s] %.2fms",
-                    route.method,
-                    route.url,
-                    resp.status,
-                    elapsed,
-                )
+                log_success(route.url, route.method, resp.status, elapsed)
 
                 response = Response(
                     status=resp.status,
@@ -85,8 +100,31 @@ class HTTPClient:
                 response._handler_result = handler_result
                 return response
 
-        except (aiohttp.ClientConnectorError, asyncio.TimeoutError):
+        except aiohttp.ClientConnectorError as e:
+            error = FastHTTPConnectionError(
+                message=str(e) or "Connection failed",
+                url=route.url,
+                method=route.method,
+            )
+            error.log()
             return None
 
-        except Exception:
+        except asyncio.TimeoutError as e:
+            timeout = config.get("timeout", "default")
+            error = FastHTTPTimeoutError(
+                message=str(e) or "Request timed out",
+                url=route.url,
+                method=route.method,
+                timeout=timeout,
+            )
+            error.log()
+            return None
+
+        except Exception as e:
+            error = FastHTTPRequestError(
+                message=str(e) or "Unknown error",
+                url=route.url,
+                method=route.method,
+            )
+            error.log()
             return None
