@@ -14,36 +14,34 @@ class Route:
     It is used by FastHTTP to send requests and process
     responses in a structured and predictable way.
     """
+
     def __init__(
         self,
         *,
         method: Annotated[
             Literal["GET", "POST", "PUT", "PATCH", "DELETE"],
-            Doc(
-                """
+            Doc("""
                 HTTP method for the request.
 
                 Determines how the request will be sent to the server.
 
                 Suppoeted methods are:
                 GET, POST, PUT, PATCH, DELETE.
-                """
-            )],
+                """),
+        ],
         url: Annotated[
             str,
-            Doc(
-                """
+            Doc("""
                 Target URL for the HTTP request.
 
                 Must be a full URL including scheme, host and path
                 Example:
                 https://api.google.com/
-                """
-            )],
+                """),
+        ],
         handler: Annotated[
             Callable,
-            Doc(
-                """
+            Doc("""
                 Response handler function.
 
                 This asyncfunction will be called with a Response object
@@ -51,41 +49,38 @@ class Route:
                 - str
                 - Response
                 - None
-                """
-            )],
+                """),
+        ],
         params: Annotated[
             dict | None,
-            Doc(
-                """
+            Doc("""
                 Query parameters to be sent with the request.
 
                 The dictionary will be encoded into the URL query string
                 and appended to the request URL.
-                """
-            )] = None,
+                """),
+        ] = None,
         json: Annotated[
             dict | None,
-            Doc(
-                """
+            Doc("""
                 JSON body to be sent with the request.
 
                 The data will be serialized to JSON and sent with the
 
                 application/json Content-Type header.
-                """
-            )] = None,
+                """),
+        ] = None,
         data: Annotated[
             Any | None,
-            Doc(
-                """
+            Doc("""
 
                 Raw request body or form data.
 
                 Can be used to send form-encoded data, plain text,
 
                 binary payloads or any custom request body.
-                """
-            )] = None,
+                """),
+        ] = None,
     ) -> None:
         self.method = method
         self.url = url

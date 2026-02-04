@@ -19,7 +19,7 @@
 FastHTTP(
     debug: bool = False,
     get_request: dict | None = None,
-    post_request: dict | None = None, 
+    post_request: dict | None = None,
     put_request: dict | None = None,
     patch_request: dict | None = None,
     delete_request: dict | None = None,
@@ -30,7 +30,7 @@ FastHTTP(
 
 - `debug` (bool): Включить подробное логирование (по умолчанию: `False`)
 - `get_request` (dict): Конфигурация по умолчанию для GET запросов
-- `post_request` (dict): Конфигурация по умолчанию для POST запросов  
+- `post_request` (dict): Конфигурация по умолчанию для POST запросов
 - `put_request` (dict): Конфигурация по умолчанию для PUT запросов
 - `patch_request` (dict): Конфигурация по умолчанию для PATCH запросов
 - `delete_request` (dict): Конфигурация по умолчанию для DELETE запросов
@@ -308,7 +308,7 @@ app = FastHTTP(debug=True)
 
 Показывает:
 - Заголовки запроса
-- Заголовки ответа  
+- Заголовки ответа
 - Тело ответа (сокращенное)
 - Результаты обработчика
 
@@ -326,7 +326,7 @@ app = FastHTTP(debug=True)
 ### Иконки
 
 - 🐛 Уровень DEBUG
-- ✔ Уровень INFO  
+- ✔ Уровень INFO
 - ⚠ Уровень WARNING
 - ✖ Уровень ERROR
 - 💀 Уровень CRITICAL
@@ -359,7 +359,7 @@ except aiohttp.ClientConnectionError as e:
 @app.get(url="https://api1.com/data")
 async def handler1(resp: Response): ...
 
-@app.get(url="https://api2.com/data") 
+@app.get(url="https://api2.com/data")
 async def handler2(resp: Response): ...
 
 @app.get(url="https://api3.com/data")

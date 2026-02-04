@@ -19,7 +19,7 @@ The main class for creating and managing HTTP requests.
 FastHTTP(
     debug: bool = False,
     get_request: dict | None = None,
-    post_request: dict | None = None, 
+    post_request: dict | None = None,
     put_request: dict | None = None,
     patch_request: dict | None = None,
     delete_request: dict | None = None,
@@ -30,7 +30,7 @@ FastHTTP(
 
 - `debug` (bool): Enable detailed logging (default: `False`)
 - `get_request` (dict): Default configuration for GET requests
-- `post_request` (dict): Default configuration for POST requests  
+- `post_request` (dict): Default configuration for POST requests
 - `put_request` (dict): Default configuration for PUT requests
 - `patch_request` (dict): Default configuration for PATCH requests
 - `delete_request` (dict): Default configuration for DELETE requests
@@ -308,7 +308,7 @@ app = FastHTTP(debug=True)
 
 Shows:
 - Request headers
-- Response headers  
+- Response headers
 - Response body (truncated)
 - Handler results
 
@@ -326,7 +326,7 @@ HH:MM:SS.mmm │ DEBUG   │ fasthttp │ ↳ {"key": "value"}
 ### Icons
 
 - 🐛 DEBUG level
-- ✔ INFO level  
+- ✔ INFO level
 - ⚠ WARNING level
 - ✖ ERROR level
 - 💀 CRITICAL level
@@ -359,7 +359,7 @@ Register multiple requests and run them together:
 @app.get(url="https://api1.com/data")
 async def handler1(resp: Response): ...
 
-@app.get(url="https://api2.com/data") 
+@app.get(url="https://api2.com/data")
 async def handler2(resp: Response): ...
 
 @app.get(url="https://api3.com/data")

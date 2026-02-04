@@ -15,11 +15,14 @@ class HTTPClient:
     applies per-method request configuration (headers, timeout, redirects),
     logs request lifecycle events, and returns normalized Response objects.
     """
+
     def __init__(self, request_configs: dict, logger) -> None:
         self.request_configs = request_configs
         self.logger = logger
 
-    async def send(self, session: aiohttp.ClientSession, route: Route) -> Response | None:
+    async def send(
+        self, session: aiohttp.ClientSession, route: Route
+    ) -> Response | None:
         """
         Send a single HTTP request based on a Route definition.
 

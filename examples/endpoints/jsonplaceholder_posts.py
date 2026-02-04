@@ -15,11 +15,10 @@ async def get_all_posts(resp: Response):
     return resp.json()
 
 
-@app.post(url="https://jsonplaceholder.typicode.com/posts", json={
-    "title": "FastHTTP",
-    "body": "Great library!",
-    "userId": 1
-})
+@app.post(
+    url="https://jsonplaceholder.typicode.com/posts",
+    json={"title": "FastHTTP", "body": "Great library!", "userId": 1},
+)
 async def create_post(resp: Response):
     print(f"Created with status: {resp.status}")
     return resp.json()

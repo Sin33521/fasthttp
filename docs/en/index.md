@@ -5,7 +5,7 @@ Welcome to the FastHTTP Client documentation! This guide will help you get start
 ## 📚 Documentation Structure
 
 - [Quick Start](quick-start.md) - Get up and running in 2 minutes
-- [API Reference](api-reference.md) - Complete API documentation  
+- [API Reference](api-reference.md) - Complete API documentation
 - [Examples](examples.md) - Real-world usage examples
 - [Configuration](configuration.md) - Advanced configuration options
 
@@ -51,7 +51,7 @@ async def handler(resp: Response) -> str:
 
 - **API Testing** - Quick and easy API client development
 - **Web Scraping** - Simple HTTP requests with logging
-- **Microservices** - Lightweight HTTP client for service communication  
+- **Microservices** - Lightweight HTTP client for service communication
 - **Prototyping** - Fast development with beautiful output
 
 ## 📖 Next Steps

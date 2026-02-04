@@ -94,7 +94,7 @@ async def create_data(resp: Response):
     # Validate response
     if resp.status != 200:
         return f"Error: {resp.status}"
-    
+
     try:
         result = resp.json()
         # Validate response structure

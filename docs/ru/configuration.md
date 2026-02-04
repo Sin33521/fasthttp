@@ -40,7 +40,7 @@ app = FastHTTP(
 app = FastHTTP(
     # Глобальные значения по умолчанию
     debug=True,
-    
+
     # Конфигурация по умолчанию для GET
     get_request={
         "headers": {
@@ -50,7 +50,7 @@ app = FastHTTP(
         "timeout": 5,
         "allow_redirects": True,
     },
-    
+
     # Конфигурация по умолчанию для POST
     post_request={
         "headers": {
@@ -60,7 +60,7 @@ app = FastHTTP(
         "timeout": 30,
         "allow_redirects": False,
     },
-    
+
     # Конфигурация по умолчанию для PUT
     put_request={
         "headers": {
@@ -68,7 +68,7 @@ app = FastHTTP(
         },
         "timeout": 30,
     },
-    
+
     # Конфигурация по умолчанию для PATCH
     patch_request={
         "headers": {
@@ -76,7 +76,7 @@ app = FastHTTP(
         },
         "timeout": 30,
     },
-    
+
     # Конфигурация по умолчанию для DELETE
     delete_request={
         "headers": {
@@ -217,7 +217,7 @@ async def slow_request(resp: Response):
 # Различные типы конфигурации таймаута
 timeout_config = {
     "timeout": 30,  # Общий таймаут запроса в секундах
-    
+
     # Специфичная для aiohttp конфигурация таймаута
     "timeout": aiohttp.ClientTimeout(
         total=30,      # Общий таймаут
@@ -276,18 +276,18 @@ app = FastHTTP(
         "headers": {
             # User agent
             "User-Agent": "FastHTTP-Client/1.0",
-            
+
             # Типы содержимого
             "Content-Type": "application/json",
             "Accept": "application/json",
-            
+
             # Пользовательские заголовки
             "X-Client-Version": "1.0.0",
             "X-Request-ID": "req-12345",
-            
+
             # Управление кешем
             "Cache-Control": "no-cache",
-            
+
             # CORS
             "Origin": "https://yourapp.com",
         },
@@ -399,18 +399,18 @@ class APIConfig:
     timeout: int = 30
     debug: bool = False
     headers: Dict[str, str] = None
-    
+
     def __post_init__(self):
         if self.headers is None:
             self.headers = {}
-    
+
     def get_fasthttp_config(self, method: str) -> Dict[str, Any]:
         base_headers = {
             "Authorization": f"Bearer {self.api_key}",
             "User-Agent": "FastHTTP-Client/1.0",
         }
         base_headers.update(self.headers)
-        
+
         return {
             "debug": self.debug,
             f"{method.lower()}_request": {
@@ -451,7 +451,7 @@ class APIConfigFactory:
                 "timeout": 10,
             },
         )
-    
+
     @staticmethod
     def weather(api_key: str, debug: bool = False):
         return FastHTTP(
@@ -464,7 +464,7 @@ class APIConfigFactory:
                 "timeout": 15,
             },
         )
-    
+
     @staticmethod
     def jsonplaceholder(debug: bool = False):
         return FastHTTP(
@@ -496,13 +496,13 @@ class ValidatedConfig:
         self.base_url = self._validate_base_url()
         self.timeout = self._validate_timeout()
         self.debug = self._validate_debug()
-    
+
     def _validate_api_key(self) -> str:
         key = os.getenv("API_KEY")
         if not key:
             raise ValueError("Переменная окружения API_KEY обязательна")
         return key
-    
+
     def _validate_base_url(self) -> str:
         url = os.getenv("API_BASE_URL")
         if not url:
@@ -510,7 +510,7 @@ class ValidatedConfig:
         if not url.startswith(("http://", "https://")):
             raise ValueError("API_BASE_URL должен начинаться с http:// или https://")
         return url
-    
+
     def _validate_timeout(self) -> int:
         timeout = os.getenv("TIMEOUT", "30")
         try:
@@ -520,7 +520,7 @@ class ValidatedConfig:
             return timeout_int
         except ValueError:
             raise ValueError("TIMEOUT должен быть корректным целым числом")
-    
+
     def _validate_debug(self) -> bool:
         debug = os.getenv("DEBUG", "false")
         return debug.lower() in ("true", "1", "yes")
@@ -549,7 +549,7 @@ from enum import Enum
 
 class Environment(Enum):
     DEVELOPMENT = "development"
-    STAGING = "staging" 
+    STAGING = "staging"
     PRODUCTION = "production"
 
 def create_app_for_environment(env: Environment) -> FastHTTP:
@@ -570,7 +570,7 @@ def create_app_for_environment(env: Environment) -> FastHTTP:
             "headers": {"User-Agent": "Prod-Client/1.0"},
         },
     }
-    
+
     config = configs[env]
     return FastHTTP(
         debug=config["debug"],
@@ -592,20 +592,20 @@ class HTTPClientPlugin:
         self.name = name
         self.headers = {}
         self.timeout = 30
-    
+
     def add_header(self, key: str, value: str):
         self.headers[key] = value
-    
+
     def set_timeout(self, timeout: int):
         self.timeout = timeout
-    
+
     def configure_app(self, app: FastHTTP):
         method = self.name.upper()
         config = {
             "headers": self.headers.copy(),
             "timeout": self.timeout,
         }
-        
+
         setattr(app, f"{method.lower()}_request", config)
 
 # Использование

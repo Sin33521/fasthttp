@@ -15,6 +15,7 @@ class ColorFormatter(logging.Formatter):
 
     Designed for CLI-friendly and readable logs.
     """
+
     RESET = "\033[0m"
 
     BOLD = "\033[1m"
@@ -45,7 +46,7 @@ class ColorFormatter(logging.Formatter):
         logging.CRITICAL: "💀",
     }
 
-    def formatTime(self, record, datefmt=None) -> str: # noqa  N802
+    def formatTime(self, record, datefmt=None) -> str:  # noqa  N802
         """
         Format the timestamp of a log record.
 
@@ -70,9 +71,7 @@ class ColorFormatter(logging.Formatter):
         color = self.LEVEL_COLORS.get(record.levelno, self.RESET)
         icon = self.LEVEL_ICONS.get(record.levelno, "")
 
-        record.levelname = (
-            f"{color}{self.BOLD}{record.levelname:<8}{self.RESET}"
-        )
+        record.levelname = f"{color}{self.BOLD}{record.levelname:<8}{self.RESET}"
         record.name = f"{self.CYAN}{record.name}{self.RESET}"
 
         msg = str(record.msg)
@@ -105,9 +104,7 @@ def setup_logger(*, debug: bool = False) -> logging.Logger:
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.DEBUG if debug else logging.INFO)
 
-    formatter = ColorFormatter(
-        "%(asctime)s │ %(levelname)s │ %(name)s │ %(message)s"
-    )
+    formatter = ColorFormatter("%(asctime)s │ %(levelname)s │ %(name)s │ %(message)s")
 
     handler.setFormatter(formatter)
     logger.addHandler(handler)

@@ -5,8 +5,7 @@ app = FastHTTP(debug=True)
 
 
 @app.get(
-    url="https://httpbin.org/get",
-    params={"page": "1", "limit": "10", "search": "test"}
+    url="https://httpbin.org/get", params={"page": "1", "limit": "10", "search": "test"}
 )
 async def query_params(resp: Response):
     return resp.json()

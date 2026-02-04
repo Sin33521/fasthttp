@@ -6,7 +6,7 @@ app = FastHTTP(debug=True)
 
 @app.post(
     url="https://httpbin.org/post",
-    data={"username": "testuser", "password": "testpass"}
+    data={"username": "testuser", "password": "testpass"},
 )
 async def form_data(resp: Response):
     return resp.json()

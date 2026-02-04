@@ -9,9 +9,7 @@ async def get_posts(resp: Response):
     return resp.json()
 
 
-@app.get(url="https://jsonplaceholder.typicode.com/comments", params={
-    "postId": "1"
-})
+@app.get(url="https://jsonplaceholder.typicode.com/comments", params={"postId": "1"})
 async def get_comments(resp: Response):
     return resp.json()
 

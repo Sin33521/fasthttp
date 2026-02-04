@@ -9,7 +9,6 @@ app = FastHTTP(
         },
         "timeout": 5,
     },
-
 )
 
 

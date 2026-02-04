@@ -194,7 +194,7 @@ async def get_vscode_stats(resp: Response):
 async def example1(resp: Response):
     return resp.status  # Возвращает 200
 
-@app.get(url="https://example.com")  
+@app.get(url="https://example.com")
 async def example2(resp: Response):
     return resp.json()  # Возвращает JSON данные
 

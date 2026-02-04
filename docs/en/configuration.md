@@ -40,7 +40,7 @@ Each HTTP method can have its own default configuration:
 app = FastHTTP(
     # Global defaults
     debug=True,
-    
+
     # GET-specific defaults
     get_request={
         "headers": {
@@ -50,7 +50,7 @@ app = FastHTTP(
         "timeout": 5,
         "allow_redirects": True,
     },
-    
+
     # POST-specific defaults
     post_request={
         "headers": {
@@ -60,7 +60,7 @@ app = FastHTTP(
         "timeout": 30,
         "allow_redirects": False,
     },
-    
+
     # PUT-specific defaults
     put_request={
         "headers": {
@@ -68,7 +68,7 @@ app = FastHTTP(
         },
         "timeout": 30,
     },
-    
+
     # PATCH-specific defaults
     patch_request={
         "headers": {
@@ -76,7 +76,7 @@ app = FastHTTP(
         },
         "timeout": 30,
     },
-    
+
     # DELETE-specific defaults
     delete_request={
         "headers": {
@@ -217,7 +217,7 @@ async def slow_request(resp: Response):
 # Different timeout types
 timeout_config = {
     "timeout": 30,  # Total request timeout in seconds
-    
+
     # aiohttp specific timeout configuration
     "timeout": aiohttp.ClientTimeout(
         total=30,      # Total timeout
@@ -276,18 +276,18 @@ app = FastHTTP(
         "headers": {
             # User agent
             "User-Agent": "FastHTTP-Client/1.0",
-            
+
             # Content types
             "Content-Type": "application/json",
             "Accept": "application/json",
-            
+
             # Custom headers
             "X-Client-Version": "1.0.0",
             "X-Request-ID": "req-12345",
-            
+
             # Cache control
             "Cache-Control": "no-cache",
-            
+
             # CORS
             "Origin": "https://yourapp.com",
         },
@@ -399,18 +399,18 @@ class APIConfig:
     timeout: int = 30
     debug: bool = False
     headers: Dict[str, str] = None
-    
+
     def __post_init__(self):
         if self.headers is None:
             self.headers = {}
-    
+
     def get_fasthttp_config(self, method: str) -> Dict[str, Any]:
         base_headers = {
             "Authorization": f"Bearer {self.api_key}",
             "User-Agent": "FastHTTP-Client/1.0",
         }
         base_headers.update(self.headers)
-        
+
         return {
             "debug": self.debug,
             f"{method.lower()}_request": {
@@ -451,7 +451,7 @@ class APIConfigFactory:
                 "timeout": 10,
             },
         )
-    
+
     @staticmethod
     def weather(api_key: str, debug: bool = False):
         return FastHTTP(
@@ -464,7 +464,7 @@ class APIConfigFactory:
                 "timeout": 15,
             },
         )
-    
+
     @staticmethod
     def jsonplaceholder(debug: bool = False):
         return FastHTTP(
@@ -496,13 +496,13 @@ class ValidatedConfig:
         self.base_url = self._validate_base_url()
         self.timeout = self._validate_timeout()
         self.debug = self._validate_debug()
-    
+
     def _validate_api_key(self) -> str:
         key = os.getenv("API_KEY")
         if not key:
             raise ValueError("API_KEY environment variable is required")
         return key
-    
+
     def _validate_base_url(self) -> str:
         url = os.getenv("API_BASE_URL")
         if not url:
@@ -510,7 +510,7 @@ class ValidatedConfig:
         if not url.startswith(("http://", "https://")):
             raise ValueError("API_BASE_URL must start with http:// or https://")
         return url
-    
+
     def _validate_timeout(self) -> int:
         timeout = os.getenv("TIMEOUT", "30")
         try:
@@ -520,7 +520,7 @@ class ValidatedConfig:
             return timeout_int
         except ValueError:
             raise ValueError("TIMEOUT must be a valid integer")
-    
+
     def _validate_debug(self) -> bool:
         debug = os.getenv("DEBUG", "false")
         return debug.lower() in ("true", "1", "yes")
@@ -549,7 +549,7 @@ from enum import Enum
 
 class Environment(Enum):
     DEVELOPMENT = "development"
-    STAGING = "staging" 
+    STAGING = "staging"
     PRODUCTION = "production"
 
 def create_app_for_environment(env: Environment) -> FastHTTP:
@@ -570,7 +570,7 @@ def create_app_for_environment(env: Environment) -> FastHTTP:
             "headers": {"User-Agent": "Prod-Client/1.0"},
         },
     }
-    
+
     config = configs[env]
     return FastHTTP(
         debug=config["debug"],
@@ -592,20 +592,20 @@ class HTTPClientPlugin:
         self.name = name
         self.headers = {}
         self.timeout = 30
-    
+
     def add_header(self, key: str, value: str):
         self.headers[key] = value
-    
+
     def set_timeout(self, timeout: int):
         self.timeout = timeout
-    
+
     def configure_app(self, app: FastHTTP):
         method = self.name.upper()
         config = {
             "headers": self.headers.copy(),
             "timeout": self.timeout,
         }
-        
+
         setattr(app, f"{method.lower()}_request", config)
 
 # Usage

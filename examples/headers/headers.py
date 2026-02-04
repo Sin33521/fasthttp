@@ -8,5 +8,6 @@ app = FastHTTP(debug=True)
 async def headers(resp: Response):
     return resp.json()
 
+
 if __name__ == "__main__":
     app.run()

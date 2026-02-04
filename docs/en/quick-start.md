@@ -194,7 +194,7 @@ Your handler function can return:
 async def example1(resp: Response):
     return resp.status  # Returns 200
 
-@app.get(url="https://example.com")  
+@app.get(url="https://example.com")
 async def example2(resp: Response):
     return resp.json()  # Returns JSON data
 

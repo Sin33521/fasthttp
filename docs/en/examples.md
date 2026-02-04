@@ -78,12 +78,12 @@ app = FastHTTP(
 async def search_python_repos(resp: Response):
     data = resp.json()
     repos = data['items'][:5]  # Top 5 results
-    
+
     result = "🔍 Top Python Repositories:\n\n"
     for i, repo in enumerate(repos, 1):
         result += f"{i}. {repo['full_name']} ⭐ {repo['stargazers_count']}\n"
         result += f"   📝 {repo['description'] or 'No description'}\n\n"
-    
+
     return result
 
 if __name__ == "__main__":
@@ -333,7 +333,7 @@ app = FastHTTP()
 # Multiple endpoints for performance testing
 endpoints = [
     "https://httpbin.org/get",
-    "https://jsonplaceholder.typicode.com/posts/1", 
+    "https://jsonplaceholder.typicode.com/posts/1",
     "https://reqres.in/api/users/1",
 ]
 
@@ -380,19 +380,19 @@ class APIClient:
             },
         )
         self.base_url = base_url
-    
+
     def get_users(self):
         @self.app.get(url=f"{self.base_url}/users")
         async def handler(resp: Response):
             return resp.json()
         return self.app
-    
+
     def create_user(self, user_data: dict):
         @self.app.post(url=f"{self.base_url}/users", json=user_data)
         async def handler(resp: Response):
             return resp.json()
         return self.app
-    
+
     def run(self):
         self.app.run()
 
@@ -456,7 +456,7 @@ app = FastHTTP(
 async def validated_response(resp: Response):
     if resp.status != 200:
         return f"❌ Error: {resp.status}"
-    
+
     try:
         data = resp.json()
         if not isinstance(data, list):
@@ -472,10 +472,10 @@ class BaseAPIClient:
     def __init__(self, base_url: str, headers: dict):
         self.app = FastHTTP(get_request={"headers": headers})
         self.base_url = base_url
-    
+
     def add_endpoint(self, method: str, path: str, **kwargs):
         url = f"{self.base_url}{path}"
-        
+
         if method.upper() == "GET":
             return self.app.get(url=url, **kwargs)
         elif method.upper() == "POST":
