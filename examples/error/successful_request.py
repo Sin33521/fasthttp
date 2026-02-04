@@ -11,5 +11,4 @@ async def successful_request(resp):
 
 
 if __name__ == "__main__":
-    print("Testing successful request...")
     app.run()

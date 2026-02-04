@@ -10,5 +10,4 @@ async def invalid_url_test(resp):
 
 
 if __name__ == "__main__":
-    print("Testing invalid URL...")
     app.run()

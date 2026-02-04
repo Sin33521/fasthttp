@@ -10,5 +10,4 @@ async def connection_test(resp):
 
 
 if __name__ == "__main__":
-    print("Testing connection error...")
     app.run()

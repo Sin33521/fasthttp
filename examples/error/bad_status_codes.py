@@ -22,5 +22,4 @@ async def forbidden_test(resp):
 
 
 if __name__ == "__main__":
-    print("Testing bad status codes...")
     app.run()
