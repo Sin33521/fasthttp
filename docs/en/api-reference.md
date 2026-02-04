@@ -333,16 +333,59 @@ HH:MM:SS.mmm │ DEBUG   │ fasthttp │ ↳ {"key": "value"}
 
 ## 🔧 Error Handling
 
-### Connection Errors
+FastHTTP provides automatic error handling with beautiful logging.
+
+### Automatic Error Handling
+
+All HTTP errors are automatically caught and logged:
+
+```python
+from fasthttp.exceptions import (
+    FastHTTPConnectionError,
+    FastHTTPTimeoutError, 
+    FastHTTPBadStatusError,
+    FastHTTPRequestError
+)
+
+# Errors are automatically logged - no need to catch them!
+@app.get(url="https://nonexistent.com/api")
+async def test_handler(resp: Response):
+    return resp.json()
+```
+
+**Automatic error types:**
+
+- `FastHTTPConnectionError` - Connection failures
+- `FastHTTPTimeoutError` - Request timeouts  
+- `FastHTTPBadStatusError` - HTTP 4xx/5xx status codes
+- `FastHTTPRequestError` - General request errors
+
+### Manual Error Raising
+
+You can manually raise these exceptions in your handlers:
+
+```python
+@app.get(url="https://api.example.com/data")
+async def get_data(resp: Response):
+    if resp.status == 404:
+        raise FastHTTPBadStatusError(
+            "Data not found",
+            url="https://api.example.com/data",
+            status_code=404
+        )
+    return resp.json()
+```
+
+### Legacy Error Handling (aiohttp)
+
+For advanced use cases, you can still use aiohttp exceptions:
+
 ```python
 try:
     app.run()
 except aiohttp.ClientConnectionError as e:
     print(f"Connection error: {e}")
 ```
-
-### Timeout Errors
-Timeouts are handled automatically and logged as errors.
 
 ### Handler Exceptions
 Exceptions in handler functions are caught and logged:

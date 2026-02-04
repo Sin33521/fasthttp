@@ -129,6 +129,45 @@ async def check_status(resp: Response):
     return f"Status: {resp.status}, Headers: {dict(resp.headers)}"
 ```
 
+## 🚨 Automatic Error Handling
+
+FastHTTP automatically catches and logs all HTTP errors for you:
+
+- **Connection errors** - when server is unreachable
+- **Timeout errors** - when request takes too long
+- **HTTP status errors** - when server returns 4xx/5xx codes
+
+```python
+from fasthttp import FastHTTP
+from fasthttp.exceptions import FastHTTPConnectionError, FastHTTPTimeoutError, FastHTTPBadStatusError
+
+app = FastHTTP(debug=True)
+
+# These will automatically log errors:
+@app.get(url="https://nonexistent-domain.com/api")  # Connection error
+@app.get(url="https://httpbin.org/delay/10")        # Timeout error  
+@app.get(url="https://httpbin.org/status/404")       # HTTP 404 error
+
+if __name__ == "__main__":
+    app.run()
+```
+
+**Example output with errors:**
+```
+ERROR | fasthttp.exceptions | ✖ FastHTTPConnectionError: Connection failed | URL: https://nonexistent-domain.com/api | Method: GET
+ERROR | fasthttp.exceptions | ✖ FastHTTPTimeoutError: Request timed out | URL: https://httpbin.org/delay/10 | Details: timeout=10
+ERROR | fasthttp.exceptions | ✖ FastHTTPBadStatusError: HTTP 404 | URL: https://httpbin.org/status/404 | Status: 404
+```
+
+You can also manually raise these exceptions in your handlers:
+```python
+@app.get(url="https://api.example.com/data")
+async def get_data(resp: Response):
+    if resp.status == 404:
+        raise FastHTTPBadStatusError("Data not found", url="https://api.example.com/data", status_code=404)
+    return resp.json()
+```
+
 ## 🔗 Multiple Requests
 
 ```python

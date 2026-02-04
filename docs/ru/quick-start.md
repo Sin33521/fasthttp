@@ -129,6 +129,45 @@ async def check_status(resp: Response):
     return f"Статус: {resp.status}, Заголовки: {dict(resp.headers)}"
 ```
 
+## 🚨 Автоматическая обработка ошибок
+
+FastHTTP автоматически перехватывает и логирует все HTTP ошибки:
+
+- **Ошибки соединения** - когда сервер недоступен
+- **Ошибки таймаута** - когда запрос занимает слишком много времени
+- **Ошибки HTTP статуса** - когда сервер возвращает коды 4xx/5xx
+
+```python
+from fasthttp import FastHTTP
+from fasthttp.exceptions import FastHTTPConnectionError, FastHTTPTimeoutError, FastHTTPBadStatusError
+
+app = FastHTTP(debug=True)
+
+# Эти запросы будут автоматически логировать ошибки:
+@app.get(url="https://несуществующий-домен.com/api")  # Ошибка соединения
+@app.get(url="https://httpbin.org/delay/10")          # Ошибка таймаута  
+@app.get(url="https://httpbin.org/status/404")        # Ошибка HTTP 404
+
+if __name__ == "__main__":
+    app.run()
+```
+
+**Пример вывода с ошибками:**
+```
+ERROR | fasthttp.exceptions | ✖ FastHTTPConnectionError: Соединение не удалось | URL: https://несуществующий-домен.com/api | Method: GET
+ERROR | fasthttp.exceptions | ✖ FastHTTPTimeoutError: Превышено время ожидания | URL: https://httpbin.org/delay/10 | Details: timeout=10
+ERROR | fasthttp.exceptions | ✖ FastHTTPBadStatusError: HTTP 404 | URL: https://httpbin.org/status/404 | Status: 404
+```
+
+Вы также можете вручную вызывать эти исключения в ваших обработчиках:
+```python
+@app.get(url="https://api.example.com/data")
+async def get_data(resp: Response):
+    if resp.status == 404:
+        raise FastHTTPBadStatusError("Данные не найдены", url="https://api.example.com/data", status_code=404)
+    return resp.json()
+```
+
 ## 🔗 Несколько запросов
 
 ```python

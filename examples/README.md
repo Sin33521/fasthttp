@@ -9,7 +9,8 @@ All examples are tested and working.
 - **parameters** — query parameters
 - **data** — sending form data
 - **endpoints** — working with various APIs
-- **advanced** — error handling, redirects
+- **advanced** — redirects and other advanced features
+- **error** — automatic error handling and testing various error scenarios
 
 ## Tested APIs
 
