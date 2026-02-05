@@ -2,7 +2,7 @@
 
 Advanced configuration options and customization for FastHTTP Client.
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [Basic Configuration](#basic-configuration)
 - [Request-Specific Settings](#request-specific-settings)
@@ -12,7 +12,7 @@ Advanced configuration options and customization for FastHTTP Client.
 - [Environment Variables](#environment-variables)
 - [Custom Configuration Patterns](#custom-configuration-patterns)
 
-## 🔧 Basic Configuration
+## Basic Configuration
 
 ### Global Configuration
 Configure defaults for all HTTP methods:
@@ -87,7 +87,7 @@ app = FastHTTP(
 )
 ```
 
-## 📝 Request-Specific Settings
+## Request-Specific Settings
 
 ### Override Global Settings
 Individual requests can override global configuration:
@@ -130,7 +130,7 @@ async def search(resp: Response):
     return resp.json()
 ```
 
-## 📊 Logging Configuration
+## Logging Configuration
 
 ### Debug Mode
 Enable detailed logging for development:
@@ -192,7 +192,7 @@ for log_entry in log_capture:
     print(f"CAPTURED: {log_entry}")
 ```
 
-## ⏱️ Timeout and Retry Settings
+## Timeout and Retry Settings
 
 ### Request Timeout
 Set timeout for individual requests or globally:
@@ -227,7 +227,7 @@ timeout_config = {
 }
 ```
 
-## 🔐 Headers and Authentication
+## Headers and Authentication
 
 ### Common Authentication Patterns
 
@@ -315,7 +315,7 @@ async def dynamic_headers_request(resp: Response):
     return resp.status
 ```
 
-## 🌐 Environment Variables
+## Environment Variables
 
 ### Configuration with Environment Variables
 Use environment variables for sensitive and environment-specific configuration:
@@ -383,7 +383,7 @@ else:  # development
     )
 ```
 
-## 🎛️ Custom Configuration Patterns
+## Custom Configuration Patterns
 
 ### Configuration Classes
 Organize configuration in classes:
@@ -540,7 +540,7 @@ except ValueError as e:
     exit(1)
 ```
 
-## 🔧 Advanced Configuration Examples
+## Advanced Configuration Examples
 
 ### Multi-Environment Setup
 ```python
@@ -619,6 +619,6 @@ auth_plugin.configure_app(app)
 
 ---
 
-*Proper configuration is key to building robust HTTP clients! 🚀*
+*Proper configuration is key to building robust HTTP clients!*
 
-*For more information, see the [API Reference](api-reference.md) and [Examples](examples.md)* 📚
+*For more information, see the [API Reference](api-reference.md) and [Examples](examples.md)*
