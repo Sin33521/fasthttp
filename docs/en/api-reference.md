@@ -2,14 +2,14 @@
 
 Complete reference for all FastHTTP Client classes, methods, and options.
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [FastHTTP Class](#fasthttp-class)
 - [Response Class](#response-class)
 - [Route Class](#route-class)
 - [Configuration Options](#configuration-options)
 
-## 🚀 FastHTTP Class
+## FastHTTP Class
 
 The main class for creating and managing HTTP requests.
 
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     app.run()
 ```
 
-## 📄 Response Class
+## Response Class
 
 Represents an HTTP response with convenient access methods.
 
@@ -205,7 +205,7 @@ def __repr__() -> str
 print(resp)  # <Response [200]>
 ```
 
-## 🛣️ Route Class
+## Route Class
 
 Internal class representing a registered route. Usually you won't interact with this directly.
 
@@ -218,7 +218,7 @@ Internal class representing a registered route. Usually you won't interact with 
 - `json` (dict): JSON data
 - `data` (dict): Form data
 
-## ⚙️ Configuration Options
+## Configuration Options
 
 ### Request Configuration
 
@@ -289,7 +289,7 @@ async def handler(resp: Response):
     return resp.status
 ```
 
-## 📊 Logging
+## Logging
 
 ### Log Levels
 
@@ -331,7 +331,7 @@ HH:MM:SS.mmm │ DEBUG   │ fasthttp │ ↳ {"key": "value"}
 - ✖ ERROR level
 - 💀 CRITICAL level
 
-## 🔧 Error Handling
+## Error Handling
 
 FastHTTP provides automatic error handling with beautiful logging.
 
@@ -393,7 +393,7 @@ Exceptions in handler functions are caught and logged:
 16:09:20.037 │ ERROR    │ fasthttp │ Handler exception in get_user: JSON decode error
 ```
 
-## 📈 Performance Tips
+## Performance Tips
 
 ### Batch Requests
 Register multiple requests and run them together:
@@ -419,4 +419,4 @@ Built on aiohttp for high-performance async operations.
 
 ---
 
-*For more examples, see [Examples](examples.md)* 📚
+*For more examples, see [Examples](examples.md)*
