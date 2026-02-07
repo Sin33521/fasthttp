@@ -30,25 +30,31 @@ class RequestsOptinal(TypedDict, total=False):
 
     headers: Annotated[
         dict[str, str],
-        Doc("""
+        Doc(
+            """
             HTTP headers to be sent with the request.
             A dictionary of header names and values that will be included
             in every request of this method type.
-            """),
+            """
+        ),
     ]
     timeout: Annotated[
         float,
-        Doc("""
+        Doc(
+            """
             Request timeout in seconds.
             Specifies the maximum amount of time to wait for the server
             to respond before the request is cancelled.
-            """),
+            """
+        ),
     ]
     allow_redirects: Annotated[
         bool,
-        Doc("""
+        Doc(
+            """
             Enable or disable HTTP redirects.
             When set to True, the client will automatically follow
             redirect responses (3xx status codes).
-            """),
+            """
+        ),
     ]
