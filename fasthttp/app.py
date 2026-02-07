@@ -50,73 +50,85 @@ class FastHTTP:
         *,
         debug: Annotated[
             bool,
-            Doc("""
+            Doc(
+                """
                 Enable debug mode.
 
                 When enabled, FastHTTP will print datailed
                 tracebacks and requests/response logs.
-                """),
+                """
+            ),
         ] = False,
         get_request: (
             Annotated[
                 RequestsOptinal,
-                Doc("""
+                Doc(
+                    """
                 Default configuration for GET requests.
 
                 Allows setting headers, timeout and other request-level
                 options that will be applied to all GET requests
-                """),
+                """
+                ),
             ]
             | None
         ) = None,
         post_request: (
             Annotated[
                 RequestsOptinal,
-                Doc("""
+                Doc(
+                    """
                 Default configuration for POST requests.
 
                 Used to define headers, timeout and other options
 
                 applied to all POST requests.
-                """),
+                """
+                ),
             ]
             | None
         ) = None,
         put_request: (
             Annotated[
                 RequestsOptinal,
-                Doc("""
+                Doc(
+                    """
                 Default configuration for PUT requests.
 
                 Controls request headers, timeout and other
 
                 options for PUT requests.
-                """),
+                """
+                ),
             ]
             | None
         ) = None,
         patch_request: (
             Annotated[
                 RequestsOptinal,
-                Doc("""
+                Doc(
+                    """
 # Create the app
                Default configuration for PATCH requests.
 
                Used to configure headers, timeout and
                other PATCH-specific options.
-                """),
+                """
+                ),
             ]
             | None
         ) = None,
         delete_request: (
             Annotated[
                 RequestsOptinal,
-                Doc("""
+                Doc(
+                    """
                 Default configuration for DELETE requests.
 
                 Allows defining haders, timeout,
                 and other options for DELETE requests.
-                """),
+                """
+                ),
             ]
             | None
         ) = None,
