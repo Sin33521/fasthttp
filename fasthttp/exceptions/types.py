@@ -41,6 +41,4 @@ def log_success(
     status_code: int,
     duration: float,
 ) -> None:
-    logger.info(
-        f"✔ {method} {url} {status_code} {duration:.2f}s"
-    )
+    logger.info(f"✔ {method} {url} {status_code} {duration:.2f}s")
