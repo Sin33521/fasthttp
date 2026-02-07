@@ -3,15 +3,15 @@ import time
 
 import aiohttp
 
-from fasthttp.exceptions import (
+from .exceptions import (
     FastHTTPBadStatusError,
     FastHTTPConnectionError,
     FastHTTPRequestError,
     FastHTTPTimeoutError,
     log_success,
 )
-from fasthttp.response import Response
-from fasthttp.routing import Route
+from .response import Response
+from .routing import Route
 
 
 class HTTPClient:
