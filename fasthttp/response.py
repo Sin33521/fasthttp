@@ -3,7 +3,7 @@ from typing import Annotated
 
 from annotated_doc import Doc
 
-from fasthttp.types import JSONResponse
+from .types import JSONResponse
 
 
 class Response:
