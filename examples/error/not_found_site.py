@@ -8,5 +8,6 @@ app = FastHTTP(debug=True)
 async def test_site(r: Response):
     return r.status
 
+
 if __name__ == "__main__":
     app.run()
