@@ -102,6 +102,11 @@ class HTTPClient:
                     status=resp.status,
                     text=text,
                     headers=dict(resp.headers),
+                    method=route.method,
+                    req_headers=config.get("headers"),
+                    query=route.params,
+                    req_json=route.json,
+                    req_data=route.data,
                 )
 
                 if self.middleware_manager:
