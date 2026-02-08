@@ -8,7 +8,7 @@ from annotated_doc import Doc
 
 from .client import HTTPClient
 from .logging import setup_logger
-from .middleware import BaseMiddleware
+from .middleware import BaseMiddleware, MiddlewareManager
 from .routing import Route
 from .types import RequestsOptinal
 
@@ -154,8 +154,6 @@ class FastHTTP:
             normalized_middleware = middleware
         else:
             normalized_middleware = [middleware]
-
-        from .middleware import MiddlewareManager
 
         self.middleware_manager = MiddlewareManager(normalized_middleware)
 
