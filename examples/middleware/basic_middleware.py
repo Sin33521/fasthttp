@@ -32,9 +32,7 @@ class HeaderMiddleware(BaseMiddleware):
         return config
 
 
-app = FastHTTP(
-    middleware=[LoggingMiddleware(), HeaderMiddleware()]
-)
+app = FastHTTP(middleware=[LoggingMiddleware(), HeaderMiddleware()])
 
 
 @app.get(url="https://httpbin.org/get")
