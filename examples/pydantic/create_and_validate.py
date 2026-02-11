@@ -1,0 +1,46 @@
+"""
+Create and validate example.
+
+This example demonstrates creating data via POST requests
+and validating the response with Pydantic models.
+"""
+
+from fasthttp import FastHTTP
+from pydantic import BaseModel
+
+
+class PostCreate(BaseModel):
+    title: str
+    body: str
+    userId: int
+
+
+class PostResponse(BaseModel):
+    id: int
+    title: str | None = None
+    body: str | None = None
+    userId: int | None = None
+
+
+app = FastHTTP()
+
+
+@app.post(
+    url="https://jsonplaceholder.typicode.com/posts",
+    json={"title": "Test Post", "body": "Test Body", "userId": 1},
+    response_model=PostResponse
+)
+async def create_post(resp) -> PostResponse:
+    return resp.json()
+
+
+@app.post(
+    url="https://jsonplaceholder.typicode.com/posts",
+    response_model=PostResponse
+)
+async def create_post_dynamic(resp) -> PostResponse:
+    return resp.json()
+
+
+if __name__ == "__main__":
+    app.run()
