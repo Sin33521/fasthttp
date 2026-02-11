@@ -1,10 +1,11 @@
 import asyncio
 import time
 from collections.abc import Callable
-from typing import Annotated, Any, Literal
+from typing import Annotated, Literal, get_args, get_origin
 
 import aiohttp
 from annotated_doc import Doc
+from pydantic import BaseModel
 
 from .client import HTTPClient
 from .logging import setup_logger
@@ -120,7 +121,8 @@ class FastHTTP:
                 RequestsOptinal,
                 Doc(
                     """
-# Create the app
+               # Create the app
+
                Default configuration for PATCH requests.
 
                Used to configure headers, timeout and
@@ -176,9 +178,12 @@ class FastHTTP:
         url: str,
         params: dict | None = None,
         json: dict | None = None,
-        data: Any | None = None,
-    ):
-        def decorator(func: Callable):
+        data: object | None = None,
+        response_model: type[BaseModel] | None = None
+    ) -> Callable[[Callable[..., object]], Callable[..., object]]:
+        def decorator(
+            func: Callable[..., object]
+        ) -> Callable[..., object]:
             self.routes.append(
                 Route(
                     method=method,
@@ -187,6 +192,7 @@ class FastHTTP:
                     params=params,
                     json=json,
                     data=data,
+                    response_model=response_model
                 )
             )
             self.logger.debug("Registered route: %s %s", method, url)
@@ -194,43 +200,80 @@ class FastHTTP:
 
         return decorator
 
-    def get(self, *, url: str, params=None):
+    def get(
+        self,
+        *,
+        url: str,
+        params: dict | None = None,
+        response_model: type[BaseModel] | None = None,
+    ) -> Callable[[Callable[..., object]], Callable[..., object]]:
         return self._add_route(
             method="GET",
             url=url,
             params=params,
+            response_model=response_model
         )
 
-    def post(self, *, url: str, json=None, data=None):
+    def post(
+        self,
+        *,
+        url: str,
+        json: dict | None = None,
+        data: object | None = None,
+        response_model: type[BaseModel] | None = None,
+    ) -> Callable[[Callable[..., object]], Callable[..., object]]:
         return self._add_route(
             method="POST",
             url=url,
             json=json,
             data=data,
+            response_model=response_model
         )
 
-    def put(self, *, url: str, json=None, data=None):
+    def put(
+        self,
+        *,
+        url: str,
+        json: dict | None = None,
+        data: object | None = None,
+        response_model: type[BaseModel] | None = None,
+    ) -> Callable[[Callable[..., object]], Callable[..., object]]:
         return self._add_route(
             method="PUT",
             url=url,
             json=json,
             data=data,
+            response_model=response_model
         )
 
-    def patch(self, *, url: str, json=None, data=None):
+    def patch(
+        self,
+        *, url: str,
+        json: dict | None = None,
+        data: object | None = None,
+        response_model: type[BaseModel] | None = None,
+    ) -> Callable[[Callable[..., object]], Callable[..., object]]:
         return self._add_route(
             method="PATCH",
             url=url,
             json=json,
             data=data,
+            response_model=response_model
         )
 
-    def delete(self, *, url: str, json=None, data=None):
+    def delete(
+        self,
+        *, url: str,
+        json: dict | None = None,
+        data: object | None = None,
+        response_model: type[BaseModel] | None = None,
+    ) -> Callable[[Callable[..., object]], Callable[..., object]]:
         return self._add_route(
             method="DELETE",
             url=url,
             json=json,
             data=data,
+            response_model=response_model
         )
 
     async def _run(self) -> None:
@@ -256,7 +299,17 @@ class FastHTTP:
                     )
 
                     handler_result = getattr(result, "_handler_result", None)
-                    if handler_result is not None:
+                    if route.response_model and handler_result is not None:
+
+                        if get_origin(route.response_model) is list:
+                            item_model = get_args(route.response_model)[0]
+                            handler_result = [
+                                item_model.model_validate(item)
+                                for item in handler_result
+                                ]
+                        else:
+                            handler_result = route.response_model.model_validate(handler_result)
+
                         self.logger.debug("[RESULT] %s", handler_result)
                     elif result.text:
                         self.logger.debug("[RESULT] %s", result.text)
