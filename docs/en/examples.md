@@ -11,6 +11,7 @@ Real-world examples and use cases for FastHTTP Client.
 - [Authentication Examples](#authentication-examples)
 - [Error Handling](#error-handling)
 - [Performance Testing](#performance-testing)
+- [Pydantic Validation](#pydantic-validation)
 
 ## GitHub API Integration
 
@@ -491,6 +492,72 @@ client = BaseAPIClient("https://api.github.com", {
 client.add_endpoint("GET", "/user")
 client.add_endpoint("GET", "/repos", params={"sort": "updated"})
 ```
+
+## Pydantic Validation
+
+### Basic Model Validation
+```python
+from fasthttp import FastHTTP
+from pydantic import BaseModel, EmailStr
+
+
+class User(BaseModel):
+    id: int
+    name: str
+    email: EmailStr
+
+
+app = FastHTTP()
+
+
+@app.get(url="https://jsonplaceholder.typicode.com/users/1", response_model=User)
+async def get_user(resp) -> User:
+    data = resp.json()
+    return data
+```
+
+### Nested Models
+```python
+from pydantic import BaseModel
+from typing import List
+
+
+class Address(BaseModel):
+    street: str
+    city: str
+    zipcode: str
+
+
+class User(BaseModel):
+    id: int
+    name: str
+    address: Address
+
+
+@app.get(url="https://jsonplaceholder.typicode.com/users/1", response_model=User)
+async def get_user_with_address(resp) -> User:
+    data = resp.json()
+    return data
+```
+
+### Field Validation
+```python
+from pydantic import BaseModel, Field
+
+
+class Post(BaseModel):
+    id: int = Field(..., gt=0)
+    title: str = Field(..., min_length=1, max_length=200)
+    body: str = Field(..., min_length=10)
+
+
+@app.get(url="https://jsonplaceholder.typicode.com/posts/1", response_model=Post)
+async def get_validated_post(resp) -> Post:
+    data = resp.json()
+    return data
+```
+
+For more Pydantic examples, see the [Pydantic Validation](pydantic-validation.md) guide.
 
 ---
 

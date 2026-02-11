@@ -104,7 +104,9 @@ def setup_logger(*, debug: bool = False) -> logging.Logger:
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.DEBUG if debug else logging.INFO)
 
-    formatter = ColorFormatter("%(asctime)s │ %(levelname)s │ %(name)s │ %(message)s")
+    formatter = ColorFormatter(
+        "%(asctime)s │ %(levelname)s │ %(name)s │ %(message)s"
+        )
 
     handler.setFormatter(formatter)
     logger.addHandler(handler)

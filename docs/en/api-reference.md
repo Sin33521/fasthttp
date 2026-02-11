@@ -62,12 +62,13 @@ app = FastHTTP(
 Register a GET request.
 
 ```python
-def get(*, url: str, params: dict | None = None) -> Callable
+def get(*, url: str, params: dict | None = None, response_model: type | None = None) -> Callable
 ```
 
 **Parameters:**
 - `url` (str): Target URL
 - `params` (dict): Query parameters (optional)
+- `response_model` (type): Pydantic model for response validation (optional)
 
 **Example:**
 ```python
@@ -81,7 +82,7 @@ async def get_users(resp: Response):
 Register a POST request.
 
 ```python
-def post(*, url: str, json: dict | None = None, data: dict | None = None, params: dict | None = None) -> Callable
+def post(*, url: str, json: dict | None = None, data: dict | None = None, params: dict | None = None, response_model: type | None = None) -> Callable
 ```
 
 **Parameters:**
@@ -89,6 +90,7 @@ def post(*, url: str, json: dict | None = None, data: dict | None = None, params
 - `json` (dict): JSON data to send (optional)
 - `data` (dict): Form data to send (optional)
 - `params` (dict): Query parameters (optional)
+- `response_model` (type): Pydantic model for response validation (optional)
 
 **Example:**
 ```python
@@ -102,7 +104,7 @@ async def create_user(resp: Response):
 Register a PUT request.
 
 ```python
-def put(*, url: str, json: dict | None = None, data: dict | None = None, params: dict | None = None) -> Callable
+def put(*, url: str, json: dict | None = None, data: dict | None = None, params: dict | None = None, response_model: type | None = None) -> Callable
 ```
 
 **Parameters:** Same as `.post()`
@@ -119,7 +121,7 @@ async def update_user(resp: Response):
 Register a PATCH request.
 
 ```python
-def patch(*, url: str, json: dict | None = None, data: dict | None = None, params: dict | None = None) -> Callable
+def patch(*, url: str, json: dict | None = None, data: dict | None = None, params: dict | None = None, response_model: type | None = None) -> Callable
 ```
 
 **Parameters:** Same as `.post()`
@@ -136,7 +138,7 @@ async def patch_user(resp: Response):
 Register a DELETE request.
 
 ```python
-def delete(*, url: str, json: dict | None = None, data: dict | None = None, params: dict | None = None) -> Callable
+def delete(*, url: str, json: dict | None = None, data: dict | None = None, params: dict | None = None, response_model: type | None = None) -> Callable
 ```
 
 **Parameters:** Same as `.post()`
