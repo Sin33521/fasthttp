@@ -1,5 +1,6 @@
-from fasthttp import FastHTTP
 from pydantic import BaseModel
+
+from fasthttp import FastHTTP
 
 
 class User(BaseModel):

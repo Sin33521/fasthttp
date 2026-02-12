@@ -1,5 +1,6 @@
+from pydantic import BaseModel
+
 from fasthttp import FastHTTP
-from pydantic import BaseModel, HttpUrl
 
 
 class Address(BaseModel):

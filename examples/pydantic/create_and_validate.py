@@ -5,8 +5,9 @@ This example demonstrates creating data via POST requests
 and validating the response with Pydantic models.
 """
 
-from fasthttp import FastHTTP
 from pydantic import BaseModel
+
+from fasthttp import FastHTTP
 
 
 class PostCreate(BaseModel):

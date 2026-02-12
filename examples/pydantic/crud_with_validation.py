@@ -1,6 +1,6 @@
-from fasthttp import FastHTTP
 from pydantic import BaseModel, Field
 
+from fasthttp import FastHTTP
 from fasthttp.response import Response
 
 

@@ -1,5 +1,6 @@
-from fasthttp import FastHTTP
 from pydantic import BaseModel, Field, field_validator
+
+from fasthttp import FastHTTP
 
 
 class Post(BaseModel):
@@ -12,7 +13,8 @@ class Post(BaseModel):
     @classmethod
     def title_must_not_be_empty(cls, v: str) -> str:
         if not v or not v.strip():
-            raise ValueError("Title cannot be empty")
+            msg = "Title cannot be empty"
+            raise ValueError(msg)
         return v.strip()
 
 
