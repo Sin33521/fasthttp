@@ -106,7 +106,7 @@ class Route:
                 If None, the result is returned unchanged.
                 """
             ),
-        ] = None
+        ] = None,
     ) -> None:
         self.method = method
         self.url = url

@@ -30,16 +30,14 @@ class HTTPClient:
         self,
         request_configs: dict,
         logger: logging.Logger,
-        middleware_manager: MiddlewareManager | None = None
+        middleware_manager: MiddlewareManager | None = None,
     ) -> None:
         self.request_configs = request_configs
         self.logger = logger
         self.middleware_manager = middleware_manager
 
     async def send(
-        self,
-        session: aiohttp.ClientSession,
-        route: Route
+        self, session: aiohttp.ClientSession, route: Route
     ) -> Response | None:
         """
         Send a single HTTP request based on a Route definition.

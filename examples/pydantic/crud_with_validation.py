@@ -14,18 +14,12 @@ class Post(BaseModel):
 app = FastHTTP(debug=True)
 
 
-@app.get(
-    url="https://jsonplaceholder.typicode.com/posts",
-    response_model=list[Post]
-)
+@app.get(url="https://jsonplaceholder.typicode.com/posts", response_model=list[Post])
 async def get_all_posts(resp: Response) -> Post:
     return resp.json()
 
 
-@app.get(
-    url="https://jsonplaceholder.typicode.com/posts/1",
-    response_model=Post
-)
+@app.get(url="https://jsonplaceholder.typicode.com/posts/1", response_model=Post)
 async def get_post(resp) -> Post:
     return resp.json()
 
@@ -33,7 +27,7 @@ async def get_post(resp) -> Post:
 @app.post(
     url="https://jsonplaceholder.typicode.com/posts",
     json={"title": "New Post", "body": "Post body", "userId": 1},
-    response_model=Post
+    response_model=Post,
 )
 async def create_post(resp) -> Post:
     return resp.json()
@@ -42,7 +36,7 @@ async def create_post(resp) -> Post:
 @app.put(
     url="https://jsonplaceholder.typicode.com/posts/1",
     json={"title": "Updated Post", "body": "Updated body", "userId": 1},
-    response_model=Post
+    response_model=Post,
 )
 async def update_post(resp) -> Post:
     return resp.json()
@@ -51,7 +45,7 @@ async def update_post(resp) -> Post:
 @app.patch(
     url="https://jsonplaceholder.typicode.com/posts/1",
     json={"title": "Patched Title"},
-    response_model=Post
+    response_model=Post,
 )
 async def patch_post(resp) -> Post:
     return resp.json()

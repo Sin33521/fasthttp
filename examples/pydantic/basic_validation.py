@@ -12,20 +12,15 @@ class User(BaseModel):
 app = FastHTTP()
 
 
-@app.get(
-    url="https://jsonplaceholder.typicode.com/users/1",
-    response_model=User
-)
+@app.get(url="https://jsonplaceholder.typicode.com/users/1", response_model=User)
 async def get_user(resp) -> User:
     return resp.json()
 
 
-@app.get(
-    url="https://jsonplaceholder.typicode.com/users",
-    response_model=list[User]
-)
+@app.get(url="https://jsonplaceholder.typicode.com/users", response_model=list[User])
 async def get_all_users(resp) -> list[User]:
     return resp.json()
+
 
 if __name__ == "__main__":
     app.run()

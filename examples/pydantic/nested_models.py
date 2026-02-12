@@ -42,18 +42,12 @@ class Post(BaseModel):
 app = FastHTTP()
 
 
-@app.get(
-    url="https://jsonplaceholder.typicode.com/users/1",
-    response_model=User
-)
+@app.get(url="https://jsonplaceholder.typicode.com/users/1", response_model=User)
 async def get_user_with_details(resp) -> User:
     return resp.json()
 
 
-@app.get(
-    url="https://jsonplaceholder.typicode.com/posts/1",
-    response_model=Post
-)
+@app.get(url="https://jsonplaceholder.typicode.com/posts/1", response_model=Post)
 async def get_post(resp) -> Post:
     return resp.json()
 

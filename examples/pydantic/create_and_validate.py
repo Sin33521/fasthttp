@@ -29,16 +29,13 @@ app = FastHTTP()
 @app.post(
     url="https://jsonplaceholder.typicode.com/posts",
     json={"title": "Test Post", "body": "Test Body", "userId": 1},
-    response_model=PostResponse
+    response_model=PostResponse,
 )
 async def create_post(resp) -> PostResponse:
     return resp.json()
 
 
-@app.post(
-    url="https://jsonplaceholder.typicode.com/posts",
-    response_model=PostResponse
-)
+@app.post(url="https://jsonplaceholder.typicode.com/posts", response_model=PostResponse)
 async def create_post_dynamic(resp) -> PostResponse:
     return resp.json()
 

@@ -7,7 +7,9 @@ class Post(BaseModel):
     userId: int = Field(..., gt=0, description="User ID must be positive")
     id: int = Field(..., gt=0, description="Post ID must be positive")
     title: str = Field(..., min_length=1, max_length=200, description="Post title")
-    body: str = Field(..., min_length=10, description="Post body must be at least 10 characters")
+    body: str = Field(
+        ..., min_length=10, description="Post body must be at least 10 characters"
+    )
 
     @field_validator("title")
     @classmethod
@@ -28,18 +30,12 @@ class Todo(BaseModel):
 app = FastHTTP()
 
 
-@app.get(
-    url="https://jsonplaceholder.typicode.com/posts/1",
-    response_model=Post
-)
+@app.get(url="https://jsonplaceholder.typicode.com/posts/1", response_model=Post)
 async def get_validated_post(resp) -> Post:
     return resp.json()
 
 
-@app.get(
-    url="https://jsonplaceholder.typicode.com/todos/1",
-    response_model=Todo
-)
+@app.get(url="https://jsonplaceholder.typicode.com/todos/1", response_model=Todo)
 async def get_todo(resp) -> Todo:
     return resp.json()
 
