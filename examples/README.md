@@ -13,7 +13,7 @@ All examples are tested and working.
 - **error** — automatic error handling and testing various error scenarios
 - **middleware** - test middleware for FastHTTP
 - **pydantic** - pydantic response validation examples
-
+- **http2** - http2 test for fasthttp
 ## Tested APIs
 
 - [httpbin.org](https://httpbin.org)
