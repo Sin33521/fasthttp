@@ -3,7 +3,7 @@ import time
 from collections.abc import Callable
 from typing import Annotated, Literal, get_args, get_origin
 
-import aiohttp
+import httpx
 from annotated_doc import Doc
 from pydantic import BaseModel
 
@@ -19,7 +19,7 @@ class FastHTTP:
     FastHTTP application entry point.
 
     FastHTTP is a lightweight asynchronous HTTP client framework
-    built on top of aiohttp. It provides a clean decorator-based API
+    built on top of httpx. It provides a clean decorator-based API
     for defining HTTP requests and handling responses, similar to
     web frameworks like FastAPI, but for outgoing requests.
 
@@ -29,13 +29,16 @@ class FastHTTP:
     - Async request execution
     - Structured and colorized logging
     - Unified Response handling
+    - HTTP/2 support (optional)
+    - Middleware system
+    - Rate limiting
 
     Example:
     ```python
         from fasthttp import FastHTTP
         from fasthttp.response import Response
 
-        app = FastHTTP()
+        app = FastHTTP(http2=True)
 
         @app.get(url="https://httpbin.org/get")
         async def get_data(resp: Response):
@@ -72,6 +75,17 @@ class FastHTTP:
                 """
             ),
         ] = None,
+        http2: Annotated[
+            bool,
+            Doc(
+                """
+                Enable HTTP/2 support.
+
+                When enabled, FastHTTP will use HTTP/2 for requests
+                to servers that support it. Requires httpx[http2] package.
+                """
+            ),
+        ] = False,
         get_request: (
             Annotated[
                 RequestsOptinal,
@@ -149,6 +163,7 @@ class FastHTTP:
     ) -> None:
         self.logger = setup_logger(debug=debug)
         self.routes: list[Route] = []
+        self.http2_enabled = http2
 
         if middleware is None:
             normalized_middleware = []
@@ -265,13 +280,16 @@ class FastHTTP:
         total = len(self.routes)
 
         self.logger.info("Sending %d requests", total)
+        if self.http2_enabled:
+            self.logger.info("HTTP/2 enabled")
+
         start_all = time.perf_counter()
 
-        async with aiohttp.ClientSession() as session:
+        async with httpx.AsyncClient(http2=self.http2_enabled) as client:
             for route in self.routes:
                 start = time.perf_counter()
 
-                result = await self.client.send(session, route)
+                result = await self.client.send(client, route)
                 elapsed = (time.perf_counter() - start) * 1000
 
                 if result and isinstance(result.status, int):
@@ -297,6 +315,8 @@ class FastHTTP:
                             )
 
                         self.logger.debug("[RESULT] %s", handler_result)
+                    elif handler_result is not None:
+                        self.logger.debug("[RESULT] %s", handler_result)
                     elif result.text:
                         self.logger.debug("[RESULT] %s", result.text)
                 else:
@@ -316,7 +336,7 @@ class FastHTTP:
         self.logger.info("FastHTTP started")
         try:
             asyncio.run(self._run())
-        except aiohttp.ClientConnectionError as e:
+        except httpx.ConnectError as e:
             self.logger.error("Connection error: %s", e)
         except KeyboardInterrupt:
             self.logger.warning("Interrupted by user")

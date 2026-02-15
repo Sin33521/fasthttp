@@ -10,16 +10,21 @@ Welcome to the FastHTTP Client documentation! This guide will help you get start
 - [Configuration](configuration.md) - Advanced configuration options
 - [Middleware](middleware.md) - Request/response interception
 - [Pydantic Validation](pydantic-validation.md) - Type-safe response validation
+- [HTTP/2 Support](http2-support.md) - HTTP/2 protocol support
 
 ## What is FastHTTP Client?
 
-FastHTTP Client is a modern asynchronous HTTP client library built on top of aiohttp. It provides:
+FastHTTP Client is a modern asynchronous HTTP client library built on top of httpx. It provides:
 
 - **Simple API** - Minimal boilerplate for HTTP requests
 - **Beautiful logging** - Detailed request/response logging with timing
 - **Type safety** - Full type annotations for better development experience
 - **Async support** - High-performance asynchronous operations
 - **All HTTP methods** - Support for GET, POST, PUT, PATCH, DELETE
+- **HTTP/2 support** - Optional HTTP/2 protocol support
+- **Middleware** - Request/response interception and modification
+- **Rate limiting** - Multiple strategies for controlling request rate
+- **Pydantic validation** - Type-safe response validation with models
 
 ## Key Features
 

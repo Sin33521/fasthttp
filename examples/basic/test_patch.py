@@ -1,7 +1,7 @@
 from fasthttp import FastHTTP
 from fasthttp.response import Response
 
-app = FastHTTP()
+app = FastHTTP(debug=True)
 
 
 @app.patch(url="https://httpbin.org/patch")

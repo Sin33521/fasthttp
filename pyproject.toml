@@ -10,7 +10,7 @@ exclude = ["/tests", "/docs", "/examples"]
 
 [project]
 name = "fasthttp-client"
-version = "0.1.5"
+version = "0.1.6"
 description = "Fast and simple HTTP client library with async support and beautiful logging"
 readme = "README.md"
 license = {text = "MIT"}
@@ -24,7 +24,7 @@ keywords = [
     "http",
     "client",
     "async",
-    "aiohttp",
+    "httpx",
     "fast",
     "requests",
     "http-client",
@@ -47,9 +47,14 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "aiohttp>=3.13.3",
     "annotated-doc>=0.0.4",
+    "httpx>=0.28.1",
     "pydantic>=2.12.5",
+]
+
+[project.optional-dependencies]
+http2 = [
+    "httpx[http2]>=0.28.1",
 ]
 
 [project.optional-dependencies]
@@ -159,7 +164,7 @@ warn_unreachable = true
 strict_equality = true
 
 [[tool.mypy.overrides]]
-module = "aiohttp.*"
+module = "httpx.*"
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]

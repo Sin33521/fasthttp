@@ -559,6 +559,26 @@ async def get_validated_post(resp) -> Post:
 
 For more Pydantic examples, see the [Pydantic Validation](pydantic-validation.md) guide.
 
+## HTTP/2 Support
+
+### Enable HTTP/2
+
+```python
+from fasthttp import FastHTTP
+from fasthttp.response import Response
+
+app = FastHTTP(http2=True)
+
+@app.get(url="https://www.google.com/")
+async def get_google(resp: Response):
+    return resp.status
+
+if __name__ == "__main__":
+    app.run()
+```
+
+**Note:** Install with `pip install fasthttp-client[http2]` for HTTP/2 support.
+
 ---
 
 *These examples demonstrate the flexibility and power of FastHTTP Client!*

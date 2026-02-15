@@ -2,7 +2,7 @@ import asyncio
 import logging
 import time
 
-import aiohttp
+import httpx
 
 from fasthttp.middleware import MiddlewareManager
 
@@ -21,7 +21,7 @@ class HTTPClient:
     """
     HTTP client responsible for sending HTTP requests.
 
-    This class manages low-level request execution using aiohttp,
+    This class manages low-level request execution using httpx,
     applies per-method request configuration (headers, timeout, redirects),
     logs request lifecycle events, and returns normalized Response objects.
     """
@@ -37,7 +37,7 @@ class HTTPClient:
         self.middleware_manager = middleware_manager
 
     async def send(
-        self, session: aiohttp.ClientSession, route: Route
+        self, client: httpx.AsyncClient, route: Route
     ) -> Response | None:
         """
         Send a single HTTP request based on a Route definition.
@@ -45,7 +45,7 @@ class HTTPClient:
         This method:
         - Applies request configuration based on HTTP method
         - Executes before_request middleware hooks
-        - Sends the request using an existing aiohttp ClientSession
+        - Sends the request using an existing httpx AsyncClient
         - Measures request execution time
         - Logs request lifecycle events
         - Executes after_response middleware hooks
@@ -75,66 +75,73 @@ class HTTPClient:
 
         start = time.perf_counter()
 
+        timeout_config = (
+            httpx.Timeout(config.get("timeout", 30.0))
+            if config.get("timeout") is not None
+            else httpx.Timeout(30.0)
+        )
+
         try:
-            async with session.request(
+            resp = await client.request(
                 method=route.method,
                 url=route.url,
                 headers=config.get("headers"),
                 params=route.params,
                 json=route.json,
-                data=route.data,
-                timeout=config.get("timeout"),
-            ) as resp:
-                elapsed = (time.perf_counter() - start) * 1000
+                content=route.data,
+                timeout=timeout_config,
+            )
 
-                if resp.status >= 400:
-                    text = await resp.text()
-                    error = FastHTTPBadStatusError(
-                        message=f"HTTP {resp.status}",
-                        url=route.url,
-                        method=route.method,
-                        status_code=resp.status,
-                        response_body=text,
-                    )
-                    error.log()
+            elapsed = (time.perf_counter() - start) * 1000
 
-                    if self.middleware_manager:
-                        await self.middleware_manager.process_on_error(
-                            error, route, config
-                        )
-
-                    return None
-
-                text = await resp.text()
-
-                log_success(route.url, route.method, resp.status, elapsed)
-
-                response = Response(
-                    status=resp.status,
-                    text=text,
-                    headers=dict(resp.headers),
+            if resp.status_code >= 400:
+                text = resp.text
+                error = FastHTTPBadStatusError(
+                    message=f"HTTP {resp.status_code}",
+                    url=route.url,
                     method=route.method,
-                    req_headers=config.get("headers"),
-                    query=route.params,
-                    req_json=route.json,
-                    req_data=route.data,
+                    status_code=resp.status_code,
+                    response_body=text,
                 )
+                error.log()
 
                 if self.middleware_manager:
-                    response = await self.middleware_manager.process_after_response(
-                        response, route, config
+                    await self.middleware_manager.process_on_error(
+                        error, route, config
                     )
 
-                handler_result = await route.handler(response)
-                if isinstance(handler_result, Response):
-                    return handler_result
-                if isinstance(handler_result, str):
-                    response.text = handler_result
+                return None
 
-                response._handler_result = handler_result
-                return response
+            text = resp.text
 
-        except aiohttp.ClientConnectorError as e:
+            log_success(route.url, route.method, resp.status_code, elapsed)
+
+            response = Response(
+                status=resp.status_code,
+                text=text,
+                headers=dict(resp.headers),
+                method=route.method,
+                req_headers=config.get("headers"),
+                query=route.params,
+                req_json=route.json,
+                req_data=route.data,
+            )
+
+            if self.middleware_manager:
+                response = await self.middleware_manager.process_after_response(
+                    response, route, config
+                )
+
+            handler_result = await route.handler(response)
+            if isinstance(handler_result, Response):
+                return handler_result
+            if isinstance(handler_result, str):
+                response.text = handler_result
+
+            response._handler_result = handler_result
+            return response
+
+        except httpx.ConnectError as e:
             error = FastHTTPConnectionError(
                 message=str(e) or "Connection failed",
                 url=route.url,
@@ -147,7 +154,7 @@ class HTTPClient:
 
             return None
 
-        except asyncio.TimeoutError as e:
+        except httpx.TimeoutException as e:
             timeout = config.get("timeout", "default")
             error = FastHTTPTimeoutError(
                 message=str(e) or "Request timed out",
